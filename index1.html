@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+
+
+</head>
+<body>
+<div id="cards"></div>
+
+<script>
+
+    myCard = [
+        {
+       poster: "card1.jpg", 
+       title1: "Тайная жизнь",
+       title2: "домашних животных 2",
+       cost: 17,
+       currency: "руб.",
+       type: "blu-ray.png",
+       sales: "sale.png",
+       action: false,
+       rating: 2,
+       but: "order.jpg"
+    },
+    {
+       poster: "card2.jpg", 
+       title1: "История ",
+       title2: "игрушек 4",
+       cost: 28,
+       currency: "руб.",
+       type: "blu-ray.png",
+       sales: "sale.png",
+       action: true,
+       rating: 4.5,
+       but: "order.jpg"
+    },
+    {
+       poster: "card3.jpg", 
+       title1: "ФЕРДИНАНД",
+       title2: " ",
+       cost: 14,
+       currency: "руб.",
+       type: "blu-ray.png",
+       sales: "sale.png",
+       action: false,
+       rating: 5,
+       but: "order.jpg"
+    }
+]
+
+let s = "";
+let doSales = "";
+let stars = "";
+
+    for (i=0; i<myCard.length; i++){
+    // РАССЧИТЫВАЕМ СТОИМОСТЬ И СКИДКУ
+    let saleImg = `<img src="images/${myCard[i].sales}" alt="">`
+
+    let fullCost = `${myCard[i].cost},00 ${myCard[i].currency}`;
+
+    let saleCost = `${Math.round(myCard[i].cost * .9)},00 ${myCard[i].currency}`;
+
+    //РАССЧИТЫВАЕМ КОЛИЧЕСТВО ЗВЁЗД
+    let halfStar = "";
+    let emptyStar = "";
+
+    function rateAmount() {
+
+    stars = '';
+    emptyStar = '';
+    halfStar = '';
+
+    for (j=1; j<=myCard[i].rating; j++) {          //полные звёзды
+    stars += '<span class="material-icons">star</span>';
+    } if (myCard[i].rating - Math.round(myCard[i].rating) != 0) { // ползвезды
+    halfStar = '<span class="material-icons">star_half</span>'
+    };
+      for (k=1; k <= 5 - myCard[i].rating; k++){    // пустые звёзды
+    emptyStar += '<span class="material-icons">star_outline</span>'
+    }
+    stars += halfStar;
+    stars += emptyStar;
+    return stars;
+    }
+    //ВСТАВКА КАРТИНКИ С АКЦИЕЙ
+    if (myCard[i].action == true) { 
+    saleImg = `<img style="opacity: 1;" src="images/${myCard[i].sales}" alt="">`
+    } else {
+    saleImg = `<img src="images/${myCard[i].sales}" alt="">`
+}
+    //     if (myCard[i].action == true) {            // если оставляю данное выражение то появляется ошибка Uncaught TypeError: Cannot read property 'style' of undefined
+    // document.images[2].style.opacity = '1';        // не смог разобраться почему и заменил на if else
+    // }
+
+    s += `
+    <div class="card">
+    <div id="poster">
+    <img src="images/${myCard[i].poster}" alt="">
+    <img src="images/${myCard[i].type}" alt="">   
+    ${saleImg}
+    </div>
+    
+    <div id="title">
+        <div>${myCard[i].title1}</div>
+        <div>${myCard[i].title2}</div>
+    </div>
+    <div id="price">
+        ${saleValue(myCard[i].action)}
+        <div>${fullCost}</div>    
+    </div>
+    <div id="rank">
+        ${rateAmount()} 
+    </div>
+    <div id="order">
+        <img src="images/${myCard[i].but}" alt="">
+    </div>
+</div>
+        `;
+    //ВСТАВЛЯЕМ АКЦИОННУЮ СТОИМОСТЬ
+    function saleValue(item) {            // НЕ УВЕРЕН, ЧТО ЭТО САМЫЙ ПРОСТОЙ ВАРИАНТ, ВОЗМОЖНО, МОЖНО ПРОЩЕ СДЕЛАТЬ
+        if (item == true) {
+            return `<div>${saleCost}</div>`
+        } else return " "
+    }
+}
+     cards.innerHTML = s;   
+
+</script>
+
+</body>
+</html>
